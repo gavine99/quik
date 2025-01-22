@@ -50,6 +50,7 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.textChanges
+import com.moez.QKSMS.common.QkMediaPlayer
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.autoDisposable
 import dagger.android.AndroidInjection
@@ -232,6 +233,14 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         super.onPause()
         activityVisibleIntent.onNext(false)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        // stop any playing audio
+        QkMediaPlayer.reset()
+    }
+
 
     override fun render(state: ComposeState) {
         if (state.hasError) {
