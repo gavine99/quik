@@ -40,7 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        app:srcCompat="@drawable/audio_preview_foreground" />
+        app:srcCompat="@drawable/audio_preview_foreground"
+        app:tint="@color/tools_theme" />
 
     <SeekBar
         android:id="@+id/seekBar"
@@ -91,7 +92,9 @@
             android:scrollHorizontally="true"
             android:singleLine="true"
             android:text="@tools:sample/lorem/random[0]"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
     </LinearLayout>
 
