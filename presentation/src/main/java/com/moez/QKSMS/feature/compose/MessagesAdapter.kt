@@ -21,7 +21,6 @@ package dev.octoshrimpy.quik.feature.compose
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Typeface
-import android.os.Build
 import android.text.Layout
 import android.text.Spannable
 import android.text.SpannableString
