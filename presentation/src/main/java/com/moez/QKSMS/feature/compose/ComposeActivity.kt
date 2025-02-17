@@ -474,8 +474,8 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
         scheduledGroup.isVisible = state.scheduled != 0L
         scheduledTime.text = dateFormatter.getScheduledTimestamp(state.scheduled)
 
-        parts.setVisible(state.attachments.isNotEmpty())
-        attachmentAdapter.data = state.attachments
+        messageAttachments.setVisible(state.attachments.isNotEmpty())
+        composeAttachmentAdapter.data = state.attachments
 
         attach.animate().rotation(if (state.attaching) 135f else 0f).start()
         attaching.isVisible = state.attaching
