@@ -800,7 +800,7 @@ class ComposeViewModel @Inject constructor(
             .autoDisposable(view.scope())
             .subscribe {
                 // stop any audio playback (ie from mms attachment or audio recorder)
-                QkMediaPlayer.stop()
+                QkMediaPlayer.reset()
 
                 // if leaving audio recording mode
                 if (!it.audioMsgRecording) {
@@ -909,6 +909,8 @@ class ComposeViewModel @Inject constructor(
                                     .setUsage(AudioAttributes.USAGE_MEDIA)
                                     .build()
                             )
+
+                            QkMediaPlayer.reset()
 
                             QkMediaPlayer.setDataSource(context, MediaRecorderManager.uri)
 
