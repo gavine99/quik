@@ -23,7 +23,9 @@ import android.view.MenuItem
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.core.view.inputmethod.InputContentInfoCompat
+import com.moez.QKSMS.common.QkMediaPlayer
 import dev.octoshrimpy.quik.common.base.QkView
+import dev.octoshrimpy.quik.common.widget.MicInputCloudView
 import dev.octoshrimpy.quik.model.Attachment
 import dev.octoshrimpy.quik.model.Recipient
 import io.reactivex.Observable
@@ -73,6 +75,15 @@ interface ComposeView : QkView<ComposeState> {
     val backPressedIntent: Observable<Unit>
     val confirmDeleteIntent: Observable<List<Long>>
     val messageLinkAskIntent: Observable<Uri>
+    val shadeIntent: Observable<Unit>
+    val recordAnAudioMessage: Observable<Unit>
+    val recordAudioAbort: Observable<Unit>
+    val recordAudioAttach: Observable<Unit>
+    val recordAudioPlayerPlayPause: Observable<QkMediaPlayer.PlayingState>
+    val recordAudioPlayerConfigUI: Subject<QkMediaPlayer.PlayingState>
+    val recordAudioPlayerVisible: Subject<Boolean>
+    val recordAudioStartStop: Subject<MicInputCloudView.ViewState>
+    val recordAudioChronometer: Subject<Boolean>
 
     fun clearSelection()
     fun toggleSelectAll()
@@ -81,6 +92,7 @@ interface ComposeView : QkView<ComposeState> {
     fun showMessageLinkAskDialog(uri: Uri)
     fun requestDefaultSms()
     fun requestStoragePermission()
+    fun requestRecordAudioPermission()
     fun requestSmsPermission()
     fun showContacts(sharing: Boolean, chips: List<Recipient>)
     fun themeChanged()
