@@ -200,6 +200,7 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     override val recordAudioStartStop: Subject<MicInputCloudView.ViewState> = PublishSubject.create()
 
     private var seekBarUpdater: Disposable? = null
+
     private val viewModel by lazy { ViewModelProviders.of(this, viewModelFactory)[ComposeViewModel::class.java] }
 
     private var cameraDestination: Uri? = null
