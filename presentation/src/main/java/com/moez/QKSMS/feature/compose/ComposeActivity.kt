@@ -21,10 +21,13 @@ package dev.octoshrimpy.quik.feature.compose
 import android.Manifest
 import android.animation.LayoutTransition
 import android.app.Activity
+import android.app.ActivityManager
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.ActivityNotFoundException
 import android.content.ContentValues
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Build
@@ -43,7 +46,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import android.widget.SeekBar
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -75,6 +77,8 @@ import dev.octoshrimpy.quik.common.util.extensions.setVisible
 import dev.octoshrimpy.quik.common.util.extensions.showKeyboard
 import dev.octoshrimpy.quik.common.widget.MicInputCloudView
 import dev.octoshrimpy.quik.common.widget.QkEditText
+import dev.octoshrimpy.quik.extensions.getDefaultActivityIconForMimeType
+import dev.octoshrimpy.quik.extensions.getType
 import dev.octoshrimpy.quik.extensions.mapNotNull
 import dev.octoshrimpy.quik.feature.compose.editing.ChipsAdapter
 import dev.octoshrimpy.quik.feature.contacts.ContactsActivity
@@ -216,26 +220,6 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
             .subscribeOn(Schedulers.single())
             .observeOn(AndroidSchedulers.mainThread())
             .autoDisposable(scope())
-    }
-
-    private val speechResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode != Activity.RESULT_OK)
-            return@registerForActivityResult
-
-        // check returned results are good
-        val match = result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-        if ((match === null) || (match.size < 1) || (match[0].isNullOrEmpty()))
-            return@registerForActivityResult
-
-        // get the edit text view
-        val message = findViewById<QkEditText>(R.id.message)
-        if (message === null)
-            return@registerForActivityResult
-
-        // populate message box with data returned by STT, set cursor to end, and focus
-        message.append(match[0])
-        message.setSelection(message.text.length)
-        message.requestFocus()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -643,15 +627,19 @@ class ComposeActivity : QkThemedActivity(), ComposeView {
     }
 
     override fun startSpeechRecognition() {
-        startActivityForResult(
-            Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).putExtra(
-                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-            ),
-            // include below if want a custom message that the STT can (optionally) display
-            // .putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak your message")
-            ComposeView.SpeechRecognitionRequestCode
-        )
+        try {
+            startActivityForResult(
+                Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).putExtra(
+                    RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                ),
+                // include below if want a custom message that the STT can (optionally) display
+                // .putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak your message")
+                ComposeView.SpeechRecognitionRequestCode
+            )
+        } catch (_: ActivityNotFoundException) {
+            makeToast(R.string.compose_toast_no_stt, Toast.LENGTH_LONG)
+        }
     }
 
     override fun themeChanged() {

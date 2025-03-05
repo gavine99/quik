@@ -185,6 +185,7 @@
     <string name="compose_message_attachment">Attachment</string>
 
     <string name="compose_toast_drag_stt">Move the speech-to-text button anywhere you like</string>
+    <string name="compose_toast_no_stt">Couldn\'t find a speech-to-text app to use</string>
 
     <string name="message_status_sending">Sending…</string>
     <string name="message_status_delivered">Delivered %s</string>
