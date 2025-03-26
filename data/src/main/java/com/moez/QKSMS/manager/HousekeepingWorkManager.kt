@@ -25,7 +25,7 @@ import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
-import com.moez.QKSMS.manager.MediaRecorderManager.AUDIO_FILE_PREFIX
+import com.moez.QKSMS.util.Constants
 import dev.octoshrimpy.quik.repository.ScheduledMessageRepositoryImpl
 import java.io.File
 import java.util.concurrent.TimeUnit
@@ -36,6 +36,8 @@ class HousekeepingWorkManager(appContext: Context, workerParams: WorkerParameter
     companion object {
         private val WORKER_TAG: String = HousekeepingWorkManager::class.java.simpleName
 
+        private val someHoursAgo = (System.currentTimeMillis() - (2 * 60 * 60 * 1000))
+
         fun register(context: Context) {
             // don't check return value because, well, we can't do much about a failure
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
@@ -43,12 +45,12 @@ class HousekeepingWorkManager(appContext: Context, workerParams: WorkerParameter
                 ExistingPeriodicWorkPolicy.KEEP,
                 PeriodicWorkRequest.Builder(
                     HousekeepingWorkManager::class.java,
-                    24,
-                    TimeUnit.HOURS
+                    1,
+                    TimeUnit.DAYS
                 )
                     .setConstraints(
                         Constraints.Builder()
-                            // idle device constraint kinda guarantees quik won't be in use
+                            // idle device constraint helps guarantees quik won't be in use
                             // as files are deleted (primarily for deleting audio recordings)
                             .setRequiresDeviceIdle(true)
                             // good citizens don't use up low batteries
@@ -68,36 +70,44 @@ class HousekeepingWorkManager(appContext: Context, workerParams: WorkerParameter
     override fun doWork(): Result {
         removeOrphanedScheduledMessageAttachmentFiles()
 
-        removeOrphanedComposeAudioRecording()
+        removeOrphanedComposeAudioRecordings()
+
+        removeSavedMessagesTexts()
 
         return Result.success()
     }
 
-    private fun removeOrphanedScheduledMessageAttachmentFiles() {
-        // get list of all scheduled message ids
-        val scheduledMessageIds = ScheduledMessageRepositoryImpl().getAllScheduledMessageIdsSnapshot()
+    private fun removeOrphanedScheduledMessageAttachmentFiles() =
+        ScheduledMessageRepositoryImpl().getAllScheduledMessageIdsSnapshot().also { schedMsgIds ->
+            // remove orphaned scheduled message dirs in files dir
+            File(applicationContext.filesDir,"")
+                // get dirs that match prefix 'scheduled-'
+                .listFiles {
+                    entry -> entry.isDirectory && entry.name.startsWith("scheduled-")
+                }
+                // filter out any dirs that have an associated scheduled message in db
+                ?.filterNot {
+                    schedMsgIds.contains(it.name.substringAfter('-').toLong())
+                }
+                // recursively delete orphan dir
+                ?.forEach { it.deleteRecursively() }
+        }
 
-        // remove orphaned scheduled message dirs in files dir
-        File(applicationContext.filesDir,"")
-            // get dirs that match prefix 'scheduled-'
-            .listFiles { entry -> entry.isDirectory && entry.name.startsWith("scheduled-") }
-            // filter out any dirs that have an associated scheduled message in db
-            ?.filterNot {
-                scheduledMessageIds.contains(it.name.substringAfter('-').toLong())
-            }
-            // recursively delete orphan dir
-            ?.forEach { it.deleteRecursively() }
-    }
-
-    private fun removeOrphanedComposeAudioRecording() {
+    private fun removeOrphanedComposeAudioRecordings() =
         // find recording files in cache dir
         applicationContext.cacheDir.listFiles { entry ->
             entry.isFile &&
-                    entry.name.startsWith(AUDIO_FILE_PREFIX) &&
-                    entry.name.endsWith(MediaRecorderManager.AUDIO_FILE_SUFFIX)
-        }
-        // delete recording file
-        ?.forEach { it.delete() }
-    }
+                    entry.name.startsWith(MediaRecorderManager.AUDIO_FILE_PREFIX) &&
+                    entry.name.endsWith(MediaRecorderManager.AUDIO_FILE_SUFFIX) &&
+                    (entry.lastModified() < someHoursAgo)
+        }?.forEach { it.delete() }  // delete recording file
+
+    private fun removeSavedMessagesTexts() =
+        // find saved message text files in cache dir
+        applicationContext.cacheDir.listFiles { entry ->
+            entry.isFile &&
+                    entry.name.startsWith(Constants.SAVED_MESSAGE_TEXT_FILE_PREFIX) &&
+                    (entry.lastModified() < someHoursAgo)
+        }?.forEach { it.delete() }  // delete message text file
 
 }
