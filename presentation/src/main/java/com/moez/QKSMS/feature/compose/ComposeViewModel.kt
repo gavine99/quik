@@ -1181,7 +1181,7 @@ class ComposeViewModel @Inject constructor(
                     )
                 }
                 .autoDisposable(view.scope())
-                .subscribe()
+                .subscribe{view.focusMessage()}
 
         // View QKSMS+
         view.viewQksmsPlusIntent
