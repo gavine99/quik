@@ -30,6 +30,7 @@ import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.moez.QKSMS.manager.MediaRecorderManager
 import com.moez.QKSMS.manager.MediaRecorderManager.AUDIO_FILE_PREFIX
+import com.moez.QKSMS.util.Constants
 import dev.octoshrimpy.quik.repository.ScheduledMessageRepository
 import dev.octoshrimpy.quik.repository.ScheduledMessageRepositoryImpl
 import dev.octoshrimpy.quik.worker.ReceiveSmsWorker.Companion.INPUT_DATA_KEY_MESSAGE_ID
@@ -42,6 +43,8 @@ class HousekeepingWorker(appContext: Context, workerParams: WorkerParameters)
     companion object {
         private val WORKER_TAG: String = HousekeepingWorker::class.java.simpleName
 
+        private val someHoursAgo = (System.currentTimeMillis() - (2 * 60 * 60 * 1000))
+
         fun register(context: Context) {
             // don't check return value because, well, we can't do much about a failure
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
@@ -49,12 +52,12 @@ class HousekeepingWorker(appContext: Context, workerParams: WorkerParameters)
                 ExistingPeriodicWorkPolicy.UPDATE,
                 PeriodicWorkRequest.Builder(
                     HousekeepingWorker::class.java,
-                    24,
-                    TimeUnit.HOURS
+                    1,
+                    TimeUnit.DAYS
                 )
                     .setConstraints(
                         Constraints.Builder()
-                            // idle device constraint kinda guarantees quik won't be in use
+                            // idle device constraint helps guarantees quik won't be in use
                             // as files are deleted (primarily for deleting audio recordings)
                             .setRequiresDeviceIdle(true)
                             // good citizens don't use up low batteries
@@ -76,7 +79,9 @@ class HousekeepingWorker(appContext: Context, workerParams: WorkerParameters)
     override fun doWork(): Result {
         removeOrphanedScheduledMessageAttachmentFiles()
 
-        removeOrphanedComposeAudioRecording()
+        removeOrphanedComposeAudioRecordings()
+
+        removeSavedMessagesTexts()
 
         return Result.success()
     }
@@ -97,7 +102,7 @@ class HousekeepingWorker(appContext: Context, workerParams: WorkerParameters)
             ?.forEach { it.deleteRecursively() }
     }
 
-    private fun removeOrphanedComposeAudioRecording() {
+    private fun removeOrphanedComposeAudioRecordings() =
         // find recording files in cache dir
         applicationContext.cacheDir.listFiles { entry ->
             entry.isFile &&
@@ -106,6 +111,13 @@ class HousekeepingWorker(appContext: Context, workerParams: WorkerParameters)
         }
         // delete recording file
         ?.forEach { it.delete() }
-    }
+
+    private fun removeSavedMessagesTexts() =
+        // find saved message text files in cache dir
+        applicationContext.cacheDir.listFiles { entry ->
+            entry.isFile &&
+                    entry.name.startsWith(Constants.SAVED_MESSAGE_TEXT_FILE_PREFIX) &&
+                    (entry.lastModified() < someHoursAgo)
+        }?.forEach { it.delete() }  // delete message text file
 
 }
