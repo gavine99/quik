@@ -1,20 +1,48 @@
 /*
- * Copyright (C) 2017 Moez Bhatti <moez.bhatti@gmail.com>
+ * Copyright (C) 2025 QUIK
  *
- * This file is part of QKSMS.
+ * This file is part of QUIK.
  *
- * QKSMS is free software: you can redistribute it and/or modify
+ * QUIK is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * QKSMS is distributed in the hope that it will be useful,
+ * QUIK is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with QKSMS.  If not, see <http://www.gnu.org/licenses/>.
+ * along with QUIK.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ * image resizing code is based on code from the grapheneos messaging app at
+ * commit point;
+ * https://github.com/GrapheneOS/Messaging/commit/7f7db8aa648bad465290777ef4b20fdbb88df0af
+ * it's original apache license is below.
+ *
+ * see https://www.apache.org/licenses/GPL-compatibility.html for
+ * information regarding compatibility between apache v2.0 and gpl v3 licenses.
+ * quote: "The Free Software Foundation considers the Apache License,
+ * Version 2.0 to be a free software license, compatible with version 3 of the GPL.
+ * ...
+ * Apache 2 software can therefore be included in GPLv3 projects ..."
+ *
+ * license on the grapheneos code the image resizing code was based on;
+ * Copyright (C) 2015 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package dev.octoshrimpy.quik.util
 
