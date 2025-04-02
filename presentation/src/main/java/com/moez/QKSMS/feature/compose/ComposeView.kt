@@ -114,6 +114,4 @@ interface ComposeView : QkView<ComposeState> {
     fun showDeleteDialog( messages: List<Long>)
     fun showClearCurrentMessageDialog()
     fun startSpeechRecognition()
-    fun focusMessage()
-
 }
