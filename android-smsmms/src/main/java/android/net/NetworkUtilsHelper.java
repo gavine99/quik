@@ -77,7 +77,7 @@ public class NetworkUtilsHelper {
      *                      the IP address information.
      * @return {@code true} for success, {@code false} for failure
      */
-    public native static boolean runDhcp(String interfaceName, DhcpInfoInternal ipInfo);
+//    public native static boolean runDhcp(String interfaceName, DhcpInfoInternal ipInfo);
 
     /**
      * Initiate renewal on the Dhcp client daemon. This call blocks until it obtains
@@ -88,7 +88,7 @@ public class NetworkUtilsHelper {
      *                      the IP address information.
      * @return {@code true} for success, {@code false} for failure
      */
-    public native static boolean runDhcpRenew(String interfaceName, DhcpInfoInternal ipInfo);
+//    public native static boolean runDhcpRenew(String interfaceName, DhcpInfoInternal ipInfo);
 
     /**
      * Shut down the DHCP client daemon.
