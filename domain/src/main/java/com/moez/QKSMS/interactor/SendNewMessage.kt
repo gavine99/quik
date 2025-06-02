@@ -70,8 +70,6 @@ class SendNewMessage @Inject constructor(
             conversationRepo.updateConversations(threadIds)
             conversationRepo.markUnarchived(threadIds)
 
-            threadIds.forEach { threadId -> shortcutManager.reportShortcutUsed(threadId) }
-
             // delete attachment local files, if any, because they're saved to mms db by now
             params.attachments.forEach { it.removeCacheFile() }
         }
