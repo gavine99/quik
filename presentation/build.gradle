@@ -39,23 +39,23 @@ android {
         // versionNameSuffix '-beta'
     }
 
-    signingConfigs {
-        release {
-            def keystoreProps = new Properties()
-            def keystorePropsFile = rootProject.file('./.gradle/.gradlerc')
-            storeFile file('./my-release-key.keystore')
-            keyAlias 'quik_release'
-            if (keystorePropsFile.exists()) {
-                keystoreProps.load(new FileInputStream(keystorePropsFile))
-            } else if (System.getenv("CI") == "true") {
-//                do nothing
-            } else {
-                throw new GradleException("Keystore properties file not found.")
-            }
-            storePassword keystoreProps['storePassword']
-            keyPassword keystoreProps['keyPassword']
-        }
-    }
+//    signingConfigs {
+//        release {
+//            def keystoreProps = new Properties()
+//            def keystorePropsFile = rootProject.file('./.gradle/.gradlerc')
+//            storeFile file('./my-release-key.keystore')
+//            keyAlias 'quik_release'
+//            if (keystorePropsFile.exists()) {
+//                keystoreProps.load(new FileInputStream(keystorePropsFile))
+//            } else if (System.getenv("CI") == "true") {
+////                do nothing
+//            } else {
+//                throw new GradleException("Keystore properties file not found.")
+//            }
+//            storePassword keystoreProps['storePassword']
+//            keyPassword keystoreProps['keyPassword']
+//        }
+//    }
     
     dependenciesInfo {
         // Disables dependency metadata when building APKs.
@@ -69,7 +69,7 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
         }
         debug {
             applicationIdSuffix ".debug"
@@ -92,7 +92,7 @@ android {
     productFlavors {
         withAnalytics { dimension "analytics" }
         noAnalytics {
-            signingConfig signingConfigs.release
+//            signingConfig signingConfigs.release
         }
     }
     lint {
@@ -100,9 +100,9 @@ android {
     }
     namespace 'dev.octoshrimpy.quik'
     if (System.getenv("CI") == "true") {
-        signingConfigs.release.storePassword = System.getenv("keystore_password")
-        signingConfigs.release.keyAlias = System.getenv("key_alias")
-        signingConfigs.release.keyPassword = System.getenv("key_password")
+//        signingConfigs.release.storePassword = System.getenv("keystore_password")
+//        signingConfigs.release.keyAlias = System.getenv("key_alias")
+//        signingConfigs.release.keyPassword = System.getenv("key_password")
     }
 }
 
