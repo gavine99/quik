@@ -33,8 +33,6 @@ import dev.octoshrimpy.quik.receiver.RemoteMessagingReceiver
 import dev.octoshrimpy.quik.receiver.SendScheduledMessageReceiver
 import dev.octoshrimpy.quik.receiver.MessageDeliveredReceiver
 import dev.octoshrimpy.quik.receiver.SmsProviderChangedReceiver
-import dev.octoshrimpy.quik.receiver.SmsReceiver
-import dev.octoshrimpy.quik.receiver.SmsSentReceiver
 import dev.octoshrimpy.quik.receiver.SmsReceivedReceiver
 import dev.octoshrimpy.quik.receiver.MessageMarkReceiver
 import dev.octoshrimpy.quik.receiver.MessageSentReceiver

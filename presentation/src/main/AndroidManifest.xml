@@ -155,6 +155,7 @@
         <receiver
             android:name=".receiver.MmsReceivedReceiver"
             android:taskAffinity="com.klinker.android.messaging.MMS_RECEIVED" />
+        <receiver android:name=".receiver.SendSmsReceiver" />
         <receiver android:name=".receiver.MessageSentReceiver" />
         <receiver android:name=".receiver.MessageDeliveredReceiver" />
         <receiver android:name=".receiver.SendScheduledMessageReceiver" />

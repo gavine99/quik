@@ -21,13 +21,11 @@ package dev.octoshrimpy.quik.common.util
 import android.annotation.TargetApi
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ShortcutInfo
 import android.content.pm.ShortcutManager
+import android.graphics.drawable.Icon
 import android.os.Build
-import androidx.core.app.Person
-import androidx.core.content.pm.ShortcutInfoCompat
-import androidx.core.content.pm.ShortcutManagerCompat
-import dev.octoshrimpy.quik.common.util.extensions.getThemedIcon
-import dev.octoshrimpy.quik.common.util.extensions.toPerson
+import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.feature.compose.ComposeActivity
 import dev.octoshrimpy.quik.model.Conversation
 import dev.octoshrimpy.quik.repository.ConversationRepository
