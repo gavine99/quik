@@ -43,7 +43,6 @@ import dev.octoshrimpy.quik.common.util.extensions.dpToPx
 import dev.octoshrimpy.quik.extensions.isImage
 import dev.octoshrimpy.quik.feature.compose.ComposeActivity
 import dev.octoshrimpy.quik.feature.qkreply.QkReplyActivity
-import dev.octoshrimpy.quik.interactor.SendExistingMessage
 import dev.octoshrimpy.quik.manager.PermissionManager
 import dev.octoshrimpy.quik.mapper.CursorToPartImpl
 import dev.octoshrimpy.quik.receiver.BlockThreadReceiver
@@ -62,6 +61,7 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 import androidx.core.net.toUri
+import dev.octoshrimpy.quik.receiver.SendSmsReceiver
 
 @Singleton
 class NotificationManagerImpl @Inject constructor(
@@ -397,7 +397,7 @@ class NotificationManagerImpl @Inject constructor(
         val contentPI = taskStackBuilder.getPendingIntent(threadId.toInt(), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
 
         //Action for resending a failed message
-        val resendIntent = Intent(context, SendExistingMessage::class.java).apply {
+        val resendIntent = Intent(context, SendSmsReceiver::class.java).apply {
             putExtra("id", message.id)
         }
         val resendPendingIntent = PendingIntent.getBroadcast(

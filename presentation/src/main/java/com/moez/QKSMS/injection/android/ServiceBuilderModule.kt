@@ -40,4 +40,9 @@ abstract class ServiceBuilderModule {
     @ActivityScope
     @ContributesAndroidInjector()
     abstract fun bindRestoreBackupService(): RestoreBackupService
+
+    @ActivityScope
+    @ContributesAndroidInjector()
+    abstract fun bindSendSmsReceiver(): SendSmsReceiver
+
 }
