@@ -18,26 +18,28 @@
  */
 package dev.octoshrimpy.quik.injection.android
 
-import dev.octoshrimpy.quik.feature.backup.RestoreBackupService
-import dev.octoshrimpy.quik.injection.scope.ActivityScope
-import dev.octoshrimpy.quik.service.HeadlessSmsSendService
-import dev.octoshrimpy.quik.service.AutoDeleteService
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import dev.octoshrimpy.quik.feature.backup.RestoreBackupService
+import dev.octoshrimpy.quik.injection.scope.ActivityScope
+import dev.octoshrimpy.quik.receiver.SendSmsReceiver
+import dev.octoshrimpy.quik.service.HeadlessSmsSendService
+import dev.octoshrimpy.quik.service.AutoDeleteService
+import dev.octoshrimpy.quik.service.HeadlessSmsSendService
 
 @Module
 abstract class ServiceBuilderModule {
 
     @ActivityScope
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector()
     abstract fun bindAutoDeleteService(): AutoDeleteService
 
     @ActivityScope
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector()
     abstract fun bindHeadlessSmsSendService(): HeadlessSmsSendService
 
     @ActivityScope
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector()
     abstract fun bindRestoreBackupService(): RestoreBackupService
 
 }

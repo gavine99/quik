@@ -18,6 +18,8 @@
  */
 package dev.octoshrimpy.quik.manager
 
+import androidx.core.content.pm.ShortcutInfoCompat
+
 interface ShortcutManager {
 
     fun updateBadge()

@@ -27,7 +27,7 @@ import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.io.FileNotFoundException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 import javax.inject.Singleton
 

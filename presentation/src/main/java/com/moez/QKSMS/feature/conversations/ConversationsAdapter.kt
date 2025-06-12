@@ -23,7 +23,6 @@ import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.text.buildSpannedString
-import androidx.core.text.color
 import androidx.core.view.isVisible
 import dev.octoshrimpy.quik.R
 import dev.octoshrimpy.quik.common.Navigator
